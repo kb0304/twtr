@@ -13,12 +13,17 @@ func (k msgServer) CreateTweet(goCtx context.Context, msg *types.MsgCreateTweet)
 	// TODO: Handling the message
 	_ = ctx
 
+	profile := k.GetOrCreateProfile(ctx, msg.Creator)
+
 	var tweet = types.Tweet{
 		Creator: msg.Creator,
 		Body:    msg.Body,
 	}
 
 	id := k.AppendTweet(ctx, tweet)
+
+	profile.TweetHead = id
+	k.SetProfile(ctx, profile)
 
 	return &types.MsgCreateTweetResponse{Id: id}, nil
 }

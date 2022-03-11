@@ -34,6 +34,31 @@ func (k Keeper) GetProfile(
 	return val, true
 }
 
+// GetProfile returns a profile from its index
+func (k Keeper) GetOrCreateProfile(
+	ctx sdk.Context,
+	user string,
+
+) (val types.Profile) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ProfileKeyPrefix))
+
+	b := store.Get(types.ProfileKey(
+		user,
+	))
+	if b == nil {
+		profile := types.Profile{
+			User:      user,
+			Followed:  []string{},
+			TweetHead: 0,
+		}
+		k.SetProfile(ctx, profile)
+		return profile
+	}
+
+	k.cdc.MustUnmarshal(b, &val)
+	return val
+}
+
 // RemoveProfile removes a profile from the store
 func (k Keeper) RemoveProfile(
 	ctx sdk.Context,
