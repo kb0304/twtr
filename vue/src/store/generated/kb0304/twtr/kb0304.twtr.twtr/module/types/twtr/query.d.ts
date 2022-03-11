@@ -35,6 +35,12 @@ export interface QueryAllProfileResponse {
     profile: Profile[];
     pagination: PageResponse | undefined;
 }
+export interface QueryFeedRequest {
+    user: string;
+}
+export interface QueryFeedResponse {
+    Tweet: Tweet[];
+}
 export declare const QueryParamsRequest: {
     encode(_: QueryParamsRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryParamsRequest;
@@ -91,6 +97,20 @@ export declare const QueryAllProfileResponse: {
     toJSON(message: QueryAllProfileResponse): unknown;
     fromPartial(object: DeepPartial<QueryAllProfileResponse>): QueryAllProfileResponse;
 };
+export declare const QueryFeedRequest: {
+    encode(message: QueryFeedRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryFeedRequest;
+    fromJSON(object: any): QueryFeedRequest;
+    toJSON(message: QueryFeedRequest): unknown;
+    fromPartial(object: DeepPartial<QueryFeedRequest>): QueryFeedRequest;
+};
+export declare const QueryFeedResponse: {
+    encode(message: QueryFeedResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryFeedResponse;
+    fromJSON(object: any): QueryFeedResponse;
+    toJSON(message: QueryFeedResponse): unknown;
+    fromPartial(object: DeepPartial<QueryFeedResponse>): QueryFeedResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
@@ -101,6 +121,8 @@ export interface Query {
     Profile(request: QueryGetProfileRequest): Promise<QueryGetProfileResponse>;
     /** Queries a list of Profile items. */
     ProfileAll(request: QueryAllProfileRequest): Promise<QueryAllProfileResponse>;
+    /** Queries a list of Feed items. */
+    Feed(request: QueryFeedRequest): Promise<QueryFeedResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
@@ -109,6 +131,7 @@ export declare class QueryClientImpl implements Query {
     Tweets(request: QueryTweetsRequest): Promise<QueryTweetsResponse>;
     Profile(request: QueryGetProfileRequest): Promise<QueryGetProfileResponse>;
     ProfileAll(request: QueryAllProfileRequest): Promise<QueryAllProfileResponse>;
+    Feed(request: QueryFeedRequest): Promise<QueryFeedResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

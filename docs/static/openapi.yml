@@ -12574,6 +12574,53 @@ paths:
                         }
       tags:
         - Query
+  /kb0304/twtr/twtr/feed:
+    get:
+      summary: Queries a list of Feed items.
+      operationId: Kb0304TwtrTwtrFeed
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Tweet:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    creator:
+                      type: string
+                    id:
+                      type: string
+                      format: uint64
+                    body:
+                      type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: user
+          in: query
+          required: false
+          type: string
+      tags:
+        - Query
   /kb0304/twtr/twtr/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -20328,6 +20375,21 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
+  kb0304.twtr.twtr.QueryFeedResponse:
+    type: object
+    properties:
+      Tweet:
+        type: array
+        items:
+          type: object
+          properties:
+            creator:
+              type: string
+            id:
+              type: string
+              format: uint64
+            body:
+              type: string
   kb0304.twtr.twtr.QueryGetProfileResponse:
     type: object
     properties:

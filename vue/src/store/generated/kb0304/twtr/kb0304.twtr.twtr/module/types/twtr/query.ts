@@ -48,6 +48,14 @@ export interface QueryAllProfileResponse {
   pagination: PageResponse | undefined;
 }
 
+export interface QueryFeedRequest {
+  user: string;
+}
+
+export interface QueryFeedResponse {
+  Tweet: Tweet[];
+}
+
 const baseQueryParamsRequest: object = {};
 
 export const QueryParamsRequest = {
@@ -584,6 +592,123 @@ export const QueryAllProfileResponse = {
   },
 };
 
+const baseQueryFeedRequest: object = { user: "" };
+
+export const QueryFeedRequest = {
+  encode(message: QueryFeedRequest, writer: Writer = Writer.create()): Writer {
+    if (message.user !== "") {
+      writer.uint32(10).string(message.user);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryFeedRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryFeedRequest } as QueryFeedRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.user = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFeedRequest {
+    const message = { ...baseQueryFeedRequest } as QueryFeedRequest;
+    if (object.user !== undefined && object.user !== null) {
+      message.user = String(object.user);
+    } else {
+      message.user = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryFeedRequest): unknown {
+    const obj: any = {};
+    message.user !== undefined && (obj.user = message.user);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryFeedRequest>): QueryFeedRequest {
+    const message = { ...baseQueryFeedRequest } as QueryFeedRequest;
+    if (object.user !== undefined && object.user !== null) {
+      message.user = object.user;
+    } else {
+      message.user = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryFeedResponse: object = {};
+
+export const QueryFeedResponse = {
+  encode(message: QueryFeedResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.Tweet) {
+      Tweet.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryFeedResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryFeedResponse } as QueryFeedResponse;
+    message.Tweet = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Tweet.push(Tweet.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFeedResponse {
+    const message = { ...baseQueryFeedResponse } as QueryFeedResponse;
+    message.Tweet = [];
+    if (object.Tweet !== undefined && object.Tweet !== null) {
+      for (const e of object.Tweet) {
+        message.Tweet.push(Tweet.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: QueryFeedResponse): unknown {
+    const obj: any = {};
+    if (message.Tweet) {
+      obj.Tweet = message.Tweet.map((e) => (e ? Tweet.toJSON(e) : undefined));
+    } else {
+      obj.Tweet = [];
+    }
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryFeedResponse>): QueryFeedResponse {
+    const message = { ...baseQueryFeedResponse } as QueryFeedResponse;
+    message.Tweet = [];
+    if (object.Tweet !== undefined && object.Tweet !== null) {
+      for (const e of object.Tweet) {
+        message.Tweet.push(Tweet.fromPartial(e));
+      }
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -594,6 +719,8 @@ export interface Query {
   Profile(request: QueryGetProfileRequest): Promise<QueryGetProfileResponse>;
   /** Queries a list of Profile items. */
   ProfileAll(request: QueryAllProfileRequest): Promise<QueryAllProfileResponse>;
+  /** Queries a list of Feed items. */
+  Feed(request: QueryFeedRequest): Promise<QueryFeedResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -633,6 +760,12 @@ export class QueryClientImpl implements Query {
     return promise.then((data) =>
       QueryAllProfileResponse.decode(new Reader(data))
     );
+  }
+
+  Feed(request: QueryFeedRequest): Promise<QueryFeedResponse> {
+    const data = QueryFeedRequest.encode(request).finish();
+    const promise = this.rpc.request("kb0304.twtr.twtr.Query", "Feed", data);
+    return promise.then((data) => QueryFeedResponse.decode(new Reader(data)));
   }
 }
 

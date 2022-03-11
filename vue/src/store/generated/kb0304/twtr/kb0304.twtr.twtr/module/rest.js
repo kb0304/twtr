@@ -140,6 +140,21 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryFeed
+         * @summary Queries a list of Feed items.
+         * @request GET:/kb0304/twtr/twtr/feed
+         */
+        this.queryFeed = (query, params = {}) => this.request({
+            path: `/kb0304/twtr/twtr/feed`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryParams
          * @summary Parameters queries the parameters of the module.
          * @request GET:/kb0304/twtr/twtr/params

@@ -472,6 +472,114 @@ export const QueryAllProfileResponse = {
         return message;
     },
 };
+const baseQueryFeedRequest = { user: "" };
+export const QueryFeedRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.user !== "") {
+            writer.uint32(10).string(message.user);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryFeedRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.user = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryFeedRequest };
+        if (object.user !== undefined && object.user !== null) {
+            message.user = String(object.user);
+        }
+        else {
+            message.user = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.user !== undefined && (obj.user = message.user);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryFeedRequest };
+        if (object.user !== undefined && object.user !== null) {
+            message.user = object.user;
+        }
+        else {
+            message.user = "";
+        }
+        return message;
+    },
+};
+const baseQueryFeedResponse = {};
+export const QueryFeedResponse = {
+    encode(message, writer = Writer.create()) {
+        for (const v of message.Tweet) {
+            Tweet.encode(v, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryFeedResponse };
+        message.Tweet = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Tweet.push(Tweet.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryFeedResponse };
+        message.Tweet = [];
+        if (object.Tweet !== undefined && object.Tweet !== null) {
+            for (const e of object.Tweet) {
+                message.Tweet.push(Tweet.fromJSON(e));
+            }
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.Tweet) {
+            obj.Tweet = message.Tweet.map((e) => (e ? Tweet.toJSON(e) : undefined));
+        }
+        else {
+            obj.Tweet = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryFeedResponse };
+        message.Tweet = [];
+        if (object.Tweet !== undefined && object.Tweet !== null) {
+            for (const e of object.Tweet) {
+                message.Tweet.push(Tweet.fromPartial(e));
+            }
+        }
+        return message;
+    },
+};
 export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
@@ -495,5 +603,10 @@ export class QueryClientImpl {
         const data = QueryAllProfileRequest.encode(request).finish();
         const promise = this.rpc.request("kb0304.twtr.twtr.Query", "ProfileAll", data);
         return promise.then((data) => QueryAllProfileResponse.decode(new Reader(data)));
+    }
+    Feed(request) {
+        const data = QueryFeedRequest.encode(request).finish();
+        const promise = this.rpc.request("kb0304.twtr.twtr.Query", "Feed", data);
+        return promise.then((data) => QueryFeedResponse.decode(new Reader(data)));
     }
 }

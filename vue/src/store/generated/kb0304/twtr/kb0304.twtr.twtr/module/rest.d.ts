@@ -35,6 +35,9 @@ export interface TwtrQueryAllProfileResponse {
      */
     pagination?: V1Beta1PageResponse;
 }
+export interface TwtrQueryFeedResponse {
+    Tweet?: TwtrTweet[];
+}
 export interface TwtrQueryGetProfileResponse {
     profile?: TwtrProfile;
 }
@@ -178,6 +181,17 @@ export declare class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryFeed
+     * @summary Queries a list of Feed items.
+     * @request GET:/kb0304/twtr/twtr/feed
+     */
+    queryFeed: (query?: {
+        user?: string;
+    }, params?: RequestParams) => Promise<HttpResponse<TwtrQueryFeedResponse, RpcStatus>>;
     /**
      * No description
      *

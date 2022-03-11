@@ -53,3 +53,19 @@ func (k Keeper) SetTweetCount(ctx sdk.Context, count uint64) {
 
 	store.Set(byteKey, bz)
 }
+
+// GetAllTTweets returns all tweets
+func (k Keeper) GetAllTweets(ctx sdk.Context) (list []types.Tweet) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TweetKey))
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.Tweet
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
+		list = append(list, val)
+	}
+
+	return list
+}
