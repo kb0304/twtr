@@ -1,6 +1,11 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../twtr/params";
+import {
+  PageRequest,
+  PageResponse,
+} from "../cosmos/base/query/v1beta1/pagination";
+import { Tweet } from "../twtr/tweet";
 
 export const protobufPackage = "kb0304.twtr.twtr";
 
@@ -13,10 +18,16 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
-export interface QueryTweetsRequest {}
+export interface QueryTweetsRequest {
+  /** Adding pagination to request */
+  pagination: PageRequest | undefined;
+}
 
 export interface QueryTweetsResponse {
-  body: string;
+  /** Returning a list of tweets */
+  Tweet: Tweet[];
+  /** Adding pagination to response */
+  pagination: PageResponse | undefined;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -119,7 +130,13 @@ export const QueryParamsResponse = {
 const baseQueryTweetsRequest: object = {};
 
 export const QueryTweetsRequest = {
-  encode(_: QueryTweetsRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: QueryTweetsRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -130,6 +147,9 @@ export const QueryTweetsRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -138,31 +158,51 @@ export const QueryTweetsRequest = {
     return message;
   },
 
-  fromJSON(_: any): QueryTweetsRequest {
+  fromJSON(object: any): QueryTweetsRequest {
     const message = { ...baseQueryTweetsRequest } as QueryTweetsRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
     return message;
   },
 
-  toJSON(_: QueryTweetsRequest): unknown {
+  toJSON(message: QueryTweetsRequest): unknown {
     const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
     return obj;
   },
 
-  fromPartial(_: DeepPartial<QueryTweetsRequest>): QueryTweetsRequest {
+  fromPartial(object: DeepPartial<QueryTweetsRequest>): QueryTweetsRequest {
     const message = { ...baseQueryTweetsRequest } as QueryTweetsRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
     return message;
   },
 };
 
-const baseQueryTweetsResponse: object = { body: "" };
+const baseQueryTweetsResponse: object = {};
 
 export const QueryTweetsResponse = {
   encode(
     message: QueryTweetsResponse,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.body !== "") {
-      writer.uint32(10).string(message.body);
+    for (const v of message.Tweet) {
+      Tweet.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -171,11 +211,15 @@ export const QueryTweetsResponse = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseQueryTweetsResponse } as QueryTweetsResponse;
+    message.Tweet = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.body = reader.string();
+          message.Tweet.push(Tweet.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -187,26 +231,46 @@ export const QueryTweetsResponse = {
 
   fromJSON(object: any): QueryTweetsResponse {
     const message = { ...baseQueryTweetsResponse } as QueryTweetsResponse;
-    if (object.body !== undefined && object.body !== null) {
-      message.body = String(object.body);
+    message.Tweet = [];
+    if (object.Tweet !== undefined && object.Tweet !== null) {
+      for (const e of object.Tweet) {
+        message.Tweet.push(Tweet.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
     } else {
-      message.body = "";
+      message.pagination = undefined;
     }
     return message;
   },
 
   toJSON(message: QueryTweetsResponse): unknown {
     const obj: any = {};
-    message.body !== undefined && (obj.body = message.body);
+    if (message.Tweet) {
+      obj.Tweet = message.Tweet.map((e) => (e ? Tweet.toJSON(e) : undefined));
+    } else {
+      obj.Tweet = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<QueryTweetsResponse>): QueryTweetsResponse {
     const message = { ...baseQueryTweetsResponse } as QueryTweetsResponse;
-    if (object.body !== undefined && object.body !== null) {
-      message.body = object.body;
+    message.Tweet = [];
+    if (object.Tweet !== undefined && object.Tweet !== null) {
+      for (const e of object.Tweet) {
+        message.Tweet.push(Tweet.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
     } else {
-      message.body = "";
+      message.pagination = undefined;
     }
     return message;
   },

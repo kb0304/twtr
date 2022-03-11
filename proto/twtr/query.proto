@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "twtr/params.proto";
+import "twtr/tweet.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/kb0304/twtr/x/twtr/types";
@@ -33,10 +34,15 @@ message QueryParamsResponse {
 }
 
 message QueryTweetsRequest {
+  // Adding pagination to request
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
 message QueryTweetsResponse {
-  string body = 1;
+  // Returning a list of tweets
+  repeated Tweet Tweet = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

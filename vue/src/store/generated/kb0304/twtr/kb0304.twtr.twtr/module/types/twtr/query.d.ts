@@ -1,5 +1,7 @@
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../twtr/params";
+import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
+import { Tweet } from "../twtr/tweet";
 export declare const protobufPackage = "kb0304.twtr.twtr";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {
@@ -10,9 +12,14 @@ export interface QueryParamsResponse {
     params: Params | undefined;
 }
 export interface QueryTweetsRequest {
+    /** Adding pagination to request */
+    pagination: PageRequest | undefined;
 }
 export interface QueryTweetsResponse {
-    body: string;
+    /** Returning a list of tweets */
+    Tweet: Tweet[];
+    /** Adding pagination to response */
+    pagination: PageResponse | undefined;
 }
 export declare const QueryParamsRequest: {
     encode(_: QueryParamsRequest, writer?: Writer): Writer;
@@ -29,11 +36,11 @@ export declare const QueryParamsResponse: {
     fromPartial(object: DeepPartial<QueryParamsResponse>): QueryParamsResponse;
 };
 export declare const QueryTweetsRequest: {
-    encode(_: QueryTweetsRequest, writer?: Writer): Writer;
+    encode(message: QueryTweetsRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryTweetsRequest;
-    fromJSON(_: any): QueryTweetsRequest;
-    toJSON(_: QueryTweetsRequest): unknown;
-    fromPartial(_: DeepPartial<QueryTweetsRequest>): QueryTweetsRequest;
+    fromJSON(object: any): QueryTweetsRequest;
+    toJSON(message: QueryTweetsRequest): unknown;
+    fromPartial(object: DeepPartial<QueryTweetsRequest>): QueryTweetsRequest;
 };
 export declare const QueryTweetsResponse: {
     encode(message: QueryTweetsResponse, writer?: Writer): Writer;
