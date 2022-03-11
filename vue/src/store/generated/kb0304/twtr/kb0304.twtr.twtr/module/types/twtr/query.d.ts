@@ -9,6 +9,11 @@ export interface QueryParamsResponse {
     /** params holds all the parameters of this module. */
     params: Params | undefined;
 }
+export interface QueryTweetsRequest {
+}
+export interface QueryTweetsResponse {
+    body: string;
+}
 export declare const QueryParamsRequest: {
     encode(_: QueryParamsRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryParamsRequest;
@@ -23,15 +28,32 @@ export declare const QueryParamsResponse: {
     toJSON(message: QueryParamsResponse): unknown;
     fromPartial(object: DeepPartial<QueryParamsResponse>): QueryParamsResponse;
 };
+export declare const QueryTweetsRequest: {
+    encode(_: QueryTweetsRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryTweetsRequest;
+    fromJSON(_: any): QueryTweetsRequest;
+    toJSON(_: QueryTweetsRequest): unknown;
+    fromPartial(_: DeepPartial<QueryTweetsRequest>): QueryTweetsRequest;
+};
+export declare const QueryTweetsResponse: {
+    encode(message: QueryTweetsResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryTweetsResponse;
+    fromJSON(object: any): QueryTweetsResponse;
+    toJSON(message: QueryTweetsResponse): unknown;
+    fromPartial(object: DeepPartial<QueryTweetsResponse>): QueryTweetsResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+    /** Queries a list of Tweets items. */
+    Tweets(request: QueryTweetsRequest): Promise<QueryTweetsResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+    Tweets(request: QueryTweetsRequest): Promise<QueryTweetsResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

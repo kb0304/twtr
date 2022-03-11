@@ -5,6 +5,7 @@ export interface MsgCreateTweet {
     body: string;
 }
 export interface MsgCreateTweetResponse {
+    id: number;
 }
 export declare const MsgCreateTweet: {
     encode(message: MsgCreateTweet, writer?: Writer): Writer;
@@ -14,11 +15,11 @@ export declare const MsgCreateTweet: {
     fromPartial(object: DeepPartial<MsgCreateTweet>): MsgCreateTweet;
 };
 export declare const MsgCreateTweetResponse: {
-    encode(_: MsgCreateTweetResponse, writer?: Writer): Writer;
+    encode(message: MsgCreateTweetResponse, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCreateTweetResponse;
-    fromJSON(_: any): MsgCreateTweetResponse;
-    toJSON(_: MsgCreateTweetResponse): unknown;
-    fromPartial(_: DeepPartial<MsgCreateTweetResponse>): MsgCreateTweetResponse;
+    fromJSON(object: any): MsgCreateTweetResponse;
+    toJSON(message: MsgCreateTweetResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCreateTweetResponse>): MsgCreateTweetResponse;
 };
 /** Msg defines the Msg service. */
 export interface Msg {

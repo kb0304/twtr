@@ -150,5 +150,19 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryTweets
+         * @summary Queries a list of Tweets items.
+         * @request GET:/kb0304/twtr/twtr/tweets
+         */
+        this.queryTweets = (params = {}) => this.request({
+            path: `/kb0304/twtr/twtr/tweets`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
     }
 }

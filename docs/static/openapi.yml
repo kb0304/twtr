@@ -12610,6 +12610,38 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /kb0304/twtr/twtr/tweets:
+    get:
+      summary: Queries a list of Tweets items.
+      operationId: Kb0304TwtrTwtrTweets
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              body:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
 definitions:
   cosmos.authz.v1beta1.Grant:
     type: object
@@ -19962,6 +19994,10 @@ definitions:
       freezing clients
   kb0304.twtr.twtr.MsgCreateTweetResponse:
     type: object
+    properties:
+      id:
+        type: string
+        format: uint64
   kb0304.twtr.twtr.Params:
     type: object
     description: Params defines the parameters for the module.
@@ -19972,3 +20008,8 @@ definitions:
         description: params holds all the parameters of this module.
         type: object
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  kb0304.twtr.twtr.QueryTweetsResponse:
+    type: object
+    properties:
+      body:
+        type: string

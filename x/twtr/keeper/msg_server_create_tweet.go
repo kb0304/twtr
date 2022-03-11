@@ -13,5 +13,12 @@ func (k msgServer) CreateTweet(goCtx context.Context, msg *types.MsgCreateTweet)
 	// TODO: Handling the message
 	_ = ctx
 
-	return &types.MsgCreateTweetResponse{}, nil
+	var tweet = types.Tweet{
+		Creator: msg.Creator,
+		Body:    msg.Body,
+	}
+
+	id := k.AppendTweet(ctx, tweet)
+
+	return &types.MsgCreateTweetResponse{Id: id}, nil
 }

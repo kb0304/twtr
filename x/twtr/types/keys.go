@@ -15,6 +15,12 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_twtr"
+
+	// Tweet
+	TweetKey = "Tweet-value-"
+
+	// Index of Tweet
+	TweetCountKey = "Tweet-count-"
 )
 
 func KeyPrefix(p string) []byte {

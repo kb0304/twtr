@@ -1,0 +1,10 @@
+syntax = "proto3";
+package kb0304.twtr.twtr;
+
+option go_package = "github.com/kb0304/twtr/x/twtr/types";
+
+message Tweet {
+  string creator = 1;
+  uint64 id = 2;
+  string body = 3; 
+}

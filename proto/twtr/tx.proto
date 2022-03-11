@@ -17,6 +17,7 @@ message MsgCreateTweet {
 }
 
 message MsgCreateTweetResponse {
+  uint64 id = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message

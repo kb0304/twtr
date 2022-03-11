@@ -20,7 +20,10 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
-export type TwtrMsgCreateTweetResponse = object;
+export interface TwtrMsgCreateTweetResponse {
+  /** @format uint64 */
+  id?: string;
+}
 
 /**
  * Params defines the parameters for the module.
@@ -33,6 +36,10 @@ export type TwtrParams = object;
 export interface TwtrQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: TwtrParams;
+}
+
+export interface TwtrQueryTweetsResponse {
+  body?: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -242,6 +249,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<TwtrQueryParamsResponse, RpcStatus>({
       path: `/kb0304/twtr/twtr/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTweets
+   * @summary Queries a list of Tweets items.
+   * @request GET:/kb0304/twtr/twtr/tweets
+   */
+  queryTweets = (params: RequestParams = {}) =>
+    this.request<TwtrQueryTweetsResponse, RpcStatus>({
+      path: `/kb0304/twtr/twtr/tweets`,
       method: "GET",
       format: "json",
       ...params,

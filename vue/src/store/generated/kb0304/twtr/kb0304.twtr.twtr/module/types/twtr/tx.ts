@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { Reader, Writer } from "protobufjs/minimal";
+import { Reader, util, configure, Writer } from "protobufjs/minimal";
+import * as Long from "long";
 
 export const protobufPackage = "kb0304.twtr.twtr";
 
@@ -8,7 +9,9 @@ export interface MsgCreateTweet {
   body: string;
 }
 
-export interface MsgCreateTweetResponse {}
+export interface MsgCreateTweetResponse {
+  id: number;
+}
 
 const baseMsgCreateTweet: object = { creator: "", body: "" };
 
@@ -82,10 +85,16 @@ export const MsgCreateTweet = {
   },
 };
 
-const baseMsgCreateTweetResponse: object = {};
+const baseMsgCreateTweetResponse: object = { id: 0 };
 
 export const MsgCreateTweetResponse = {
-  encode(_: MsgCreateTweetResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgCreateTweetResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
     return writer;
   },
 
@@ -96,6 +105,9 @@ export const MsgCreateTweetResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -104,18 +116,31 @@ export const MsgCreateTweetResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgCreateTweetResponse {
+  fromJSON(object: any): MsgCreateTweetResponse {
     const message = { ...baseMsgCreateTweetResponse } as MsgCreateTweetResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
     return message;
   },
 
-  toJSON(_: MsgCreateTweetResponse): unknown {
+  toJSON(message: MsgCreateTweetResponse): unknown {
     const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgCreateTweetResponse>): MsgCreateTweetResponse {
+  fromPartial(
+    object: DeepPartial<MsgCreateTweetResponse>
+  ): MsgCreateTweetResponse {
     const message = { ...baseMsgCreateTweetResponse } as MsgCreateTweetResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
     return message;
   },
 };
@@ -152,6 +177,16 @@ interface Rpc {
   ): Promise<Uint8Array>;
 }
 
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -162,3 +197,15 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (util.Long !== Long) {
+  util.Long = Long as any;
+  configure();
+}
