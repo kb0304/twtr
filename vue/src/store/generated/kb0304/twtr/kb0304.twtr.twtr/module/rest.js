@@ -154,6 +154,35 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryProfileAll
+         * @summary Queries a list of Profile items.
+         * @request GET:/kb0304/twtr/twtr/profile
+         */
+        this.queryProfileAll = (query, params = {}) => this.request({
+            path: `/kb0304/twtr/twtr/profile`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryProfile
+         * @summary Queries a Profile by index.
+         * @request GET:/kb0304/twtr/twtr/profile/{user}
+         */
+        this.queryProfile = (user, params = {}) => this.request({
+            path: `/kb0304/twtr/twtr/profile/${user}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryTweets
          * @summary Queries a list of Tweets items.
          * @request GET:/kb0304/twtr/twtr/tweets

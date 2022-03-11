@@ -2,6 +2,7 @@ import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../twtr/params";
 import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
 import { Tweet } from "../twtr/tweet";
+import { Profile } from "../twtr/profile";
 export declare const protobufPackage = "kb0304.twtr.twtr";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {
@@ -19,6 +20,19 @@ export interface QueryTweetsResponse {
     /** Returning a list of tweets */
     Tweet: Tweet[];
     /** Adding pagination to response */
+    pagination: PageResponse | undefined;
+}
+export interface QueryGetProfileRequest {
+    user: string;
+}
+export interface QueryGetProfileResponse {
+    profile: Profile | undefined;
+}
+export interface QueryAllProfileRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryAllProfileResponse {
+    profile: Profile[];
     pagination: PageResponse | undefined;
 }
 export declare const QueryParamsRequest: {
@@ -49,18 +63,52 @@ export declare const QueryTweetsResponse: {
     toJSON(message: QueryTweetsResponse): unknown;
     fromPartial(object: DeepPartial<QueryTweetsResponse>): QueryTweetsResponse;
 };
+export declare const QueryGetProfileRequest: {
+    encode(message: QueryGetProfileRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetProfileRequest;
+    fromJSON(object: any): QueryGetProfileRequest;
+    toJSON(message: QueryGetProfileRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetProfileRequest>): QueryGetProfileRequest;
+};
+export declare const QueryGetProfileResponse: {
+    encode(message: QueryGetProfileResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetProfileResponse;
+    fromJSON(object: any): QueryGetProfileResponse;
+    toJSON(message: QueryGetProfileResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetProfileResponse>): QueryGetProfileResponse;
+};
+export declare const QueryAllProfileRequest: {
+    encode(message: QueryAllProfileRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllProfileRequest;
+    fromJSON(object: any): QueryAllProfileRequest;
+    toJSON(message: QueryAllProfileRequest): unknown;
+    fromPartial(object: DeepPartial<QueryAllProfileRequest>): QueryAllProfileRequest;
+};
+export declare const QueryAllProfileResponse: {
+    encode(message: QueryAllProfileResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllProfileResponse;
+    fromJSON(object: any): QueryAllProfileResponse;
+    toJSON(message: QueryAllProfileResponse): unknown;
+    fromPartial(object: DeepPartial<QueryAllProfileResponse>): QueryAllProfileResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Parameters queries the parameters of the module. */
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
     /** Queries a list of Tweets items. */
     Tweets(request: QueryTweetsRequest): Promise<QueryTweetsResponse>;
+    /** Queries a Profile by index. */
+    Profile(request: QueryGetProfileRequest): Promise<QueryGetProfileResponse>;
+    /** Queries a list of Profile items. */
+    ProfileAll(request: QueryAllProfileRequest): Promise<QueryAllProfileResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
     Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
     Tweets(request: QueryTweetsRequest): Promise<QueryTweetsResponse>;
+    Profile(request: QueryGetProfileRequest): Promise<QueryGetProfileResponse>;
+    ProfileAll(request: QueryAllProfileRequest): Promise<QueryAllProfileResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

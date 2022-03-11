@@ -30,6 +30,33 @@ export interface TwtrMsgCreateTweetResponse {
  */
 export type TwtrParams = object;
 
+export interface TwtrProfile {
+  user?: string;
+  followed?: string[];
+
+  /** @format uint64 */
+  tweetHead?: string;
+}
+
+export interface TwtrQueryAllProfileResponse {
+  profile?: TwtrProfile[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface TwtrQueryGetProfileResponse {
+  profile?: TwtrProfile;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -331,6 +358,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<TwtrQueryParamsResponse, RpcStatus>({
       path: `/kb0304/twtr/twtr/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryProfileAll
+   * @summary Queries a list of Profile items.
+   * @request GET:/kb0304/twtr/twtr/profile
+   */
+  queryProfileAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<TwtrQueryAllProfileResponse, RpcStatus>({
+      path: `/kb0304/twtr/twtr/profile`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryProfile
+   * @summary Queries a Profile by index.
+   * @request GET:/kb0304/twtr/twtr/profile/{user}
+   */
+  queryProfile = (user: string, params: RequestParams = {}) =>
+    this.request<TwtrQueryGetProfileResponse, RpcStatus>({
+      path: `/kb0304/twtr/twtr/profile/${user}`,
       method: "GET",
       format: "json",
       ...params,

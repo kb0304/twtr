@@ -15,6 +15,28 @@ export interface TwtrMsgCreateTweetResponse {
  * Params defines the parameters for the module.
  */
 export declare type TwtrParams = object;
+export interface TwtrProfile {
+    user?: string;
+    followed?: string[];
+    /** @format uint64 */
+    tweetHead?: string;
+}
+export interface TwtrQueryAllProfileResponse {
+    profile?: TwtrProfile[];
+    /**
+     * PageResponse is to be embedded in gRPC response messages where the
+     * corresponding request message has used PageRequest.
+     *
+     *  message SomeResponse {
+     *          repeated Bar results = 1;
+     *          PageResponse page = 2;
+     *  }
+     */
+    pagination?: V1Beta1PageResponse;
+}
+export interface TwtrQueryGetProfileResponse {
+    profile?: TwtrProfile;
+}
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -164,6 +186,30 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/kb0304/twtr/twtr/params
      */
     queryParams: (params?: RequestParams) => Promise<HttpResponse<TwtrQueryParamsResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryProfileAll
+     * @summary Queries a list of Profile items.
+     * @request GET:/kb0304/twtr/twtr/profile
+     */
+    queryProfileAll: (query?: {
+        "pagination.key"?: string;
+        "pagination.offset"?: string;
+        "pagination.limit"?: string;
+        "pagination.countTotal"?: boolean;
+        "pagination.reverse"?: boolean;
+    }, params?: RequestParams) => Promise<HttpResponse<TwtrQueryAllProfileResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryProfile
+     * @summary Queries a Profile by index.
+     * @request GET:/kb0304/twtr/twtr/profile/{user}
+     */
+    queryProfile: (user: string, params?: RequestParams) => Promise<HttpResponse<TwtrQueryGetProfileResponse, RpcStatus>>;
     /**
      * No description
      *

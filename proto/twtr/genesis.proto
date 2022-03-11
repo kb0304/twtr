@@ -3,6 +3,7 @@ package kb0304.twtr.twtr;
 
 import "gogoproto/gogo.proto";
 import "twtr/params.proto";
+import "twtr/profile.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/kb0304/twtr/x/twtr/types";
@@ -10,5 +11,6 @@ option go_package = "github.com/kb0304/twtr/x/twtr/types";
 // GenesisState defines the twtr module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
+  repeated Profile profileList = 2 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

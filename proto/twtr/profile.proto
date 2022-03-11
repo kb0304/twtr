@@ -1,0 +1,12 @@
+syntax = "proto3";
+package kb0304.twtr.twtr;
+
+option go_package = "github.com/kb0304/twtr/x/twtr/types";
+
+message Profile {
+  string user = 1; 
+  repeated string followed = 2; 
+  uint64 tweetHead = 3; 
+  
+}
+

@@ -2,8 +2,9 @@ import { txClient, queryClient, MissingWalletError, registry } from './module';
 // @ts-ignore
 import { SpVuexError } from '@starport/vuex';
 import { Params } from "./module/types/twtr/params";
+import { Profile } from "./module/types/twtr/profile";
 import { Tweet } from "./module/types/twtr/tweet";
-export { Params, Tweet };
+export { Params, Profile, Tweet };
 async function initTxClient(vuexGetters) {
     return await txClient(vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
@@ -39,8 +40,11 @@ const getDefaultState = () => {
     return {
         Params: {},
         Tweets: {},
+        Profile: {},
+        ProfileAll: {},
         _Structure: {
             Params: getStructure(Params.fromPartial({})),
+            Profile: getStructure(Profile.fromPartial({})),
             Tweet: getStructure(Tweet.fromPartial({})),
         },
         _Registry: registry,
@@ -78,6 +82,18 @@ export default {
                 params.query = null;
             }
             return state.Tweets[JSON.stringify(params)] ?? {};
+        },
+        getProfile: (state) => (params = { params: {} }) => {
+            if (!params.query) {
+                params.query = null;
+            }
+            return state.Profile[JSON.stringify(params)] ?? {};
+        },
+        getProfileAll: (state) => (params = { params: {} }) => {
+            if (!params.query) {
+                params.query = null;
+            }
+            return state.ProfileAll[JSON.stringify(params)] ?? {};
         },
         getTypeStructure: (state) => (type) => {
             return state._Structure[type].fields;
@@ -142,6 +158,38 @@ export default {
             }
             catch (e) {
                 throw new SpVuexError('QueryClient:QueryTweets', 'API Node Unavailable. Could not perform query: ' + e.message);
+            }
+        },
+        async QueryProfile({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params, query = null }) {
+            try {
+                const key = params ?? {};
+                const queryClient = await initQueryClient(rootGetters);
+                let value = (await queryClient.queryProfile(key.user)).data;
+                commit('QUERY', { query: 'Profile', key: { params: { ...key }, query }, value });
+                if (subscribe)
+                    commit('SUBSCRIBE', { action: 'QueryProfile', payload: { options: { all }, params: { ...key }, query } });
+                return getters['getProfile']({ params: { ...key }, query }) ?? {};
+            }
+            catch (e) {
+                throw new SpVuexError('QueryClient:QueryProfile', 'API Node Unavailable. Could not perform query: ' + e.message);
+            }
+        },
+        async QueryProfileAll({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params, query = null }) {
+            try {
+                const key = params ?? {};
+                const queryClient = await initQueryClient(rootGetters);
+                let value = (await queryClient.queryProfileAll(query)).data;
+                while (all && value.pagination && value.pagination.next_key != null) {
+                    let next_values = (await queryClient.queryProfileAll({ ...query, 'pagination.key': value.pagination.next_key })).data;
+                    value = mergeResults(value, next_values);
+                }
+                commit('QUERY', { query: 'ProfileAll', key: { params: { ...key }, query }, value });
+                if (subscribe)
+                    commit('SUBSCRIBE', { action: 'QueryProfileAll', payload: { options: { all }, params: { ...key }, query } });
+                return getters['getProfileAll']({ params: { ...key }, query }) ?? {};
+            }
+            catch (e) {
+                throw new SpVuexError('QueryClient:QueryProfileAll', 'API Node Unavailable. Could not perform query: ' + e.message);
             }
         },
         async sendMsgCreateTweet({ rootGetters }, { value, fee = [], memo = '' }) {

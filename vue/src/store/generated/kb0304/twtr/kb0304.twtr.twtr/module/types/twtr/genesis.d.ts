@@ -1,10 +1,12 @@
 import { Params } from "../twtr/params";
+import { Profile } from "../twtr/profile";
 import { Writer, Reader } from "protobufjs/minimal";
 export declare const protobufPackage = "kb0304.twtr.twtr";
 /** GenesisState defines the twtr module's genesis state. */
 export interface GenesisState {
-    /** this line is used by starport scaffolding # genesis/proto/state */
     params: Params | undefined;
+    /** this line is used by starport scaffolding # genesis/proto/state */
+    profileList: Profile[];
 }
 export declare const GenesisState: {
     encode(message: GenesisState, writer?: Writer): Writer;

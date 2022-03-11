@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "twtr/params.proto";
 import "twtr/tweet.proto";
+import "twtr/profile.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/kb0304/twtr/x/twtr/types";
@@ -19,6 +20,16 @@ service Query {
   // Queries a list of Tweets items.
 	rpc Tweets(QueryTweetsRequest) returns (QueryTweetsResponse) {
 		option (google.api.http).get = "/kb0304/twtr/twtr/tweets";
+	}
+
+// Queries a Profile by index.
+	rpc Profile(QueryGetProfileRequest) returns (QueryGetProfileResponse) {
+		option (google.api.http).get = "/kb0304/twtr/twtr/profile/{user}";
+	}
+
+	// Queries a list of Profile items.
+	rpc ProfileAll(QueryAllProfileRequest) returns (QueryAllProfileResponse) {
+		option (google.api.http).get = "/kb0304/twtr/twtr/profile";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -43,6 +54,24 @@ message QueryTweetsResponse {
   repeated Tweet Tweet = 1;
   // Adding pagination to response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetProfileRequest {
+	  string user = 1;
+
+}
+
+message QueryGetProfileResponse {
+	Profile profile = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllProfileRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllProfileResponse {
+	repeated Profile profile = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3
