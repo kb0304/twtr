@@ -4,10 +4,12 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
+import { MsgFollow } from "./types/twtr/tx";
 import { MsgCreateTweet } from "./types/twtr/tx";
 
 
 const types = [
+  ["/kb0304.twtr.twtr.MsgFollow", MsgFollow],
   ["/kb0304.twtr.twtr.MsgCreateTweet", MsgCreateTweet],
   
 ];
@@ -41,6 +43,7 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
+    msgFollow: (data: MsgFollow): EncodeObject => ({ typeUrl: "/kb0304.twtr.twtr.MsgFollow", value: MsgFollow.fromPartial( data ) }),
     msgCreateTweet: (data: MsgCreateTweet): EncodeObject => ({ typeUrl: "/kb0304.twtr.twtr.MsgCreateTweet", value: MsgCreateTweet.fromPartial( data ) }),
     
   };

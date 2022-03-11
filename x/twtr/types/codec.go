@@ -9,12 +9,16 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCreateTweet{}, "twtr/CreateTweet", nil)
+	cdc.RegisterConcrete(&MsgFollow{}, "twtr/Follow", nil)
 	// this line is used by starport scaffolding # 2
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreateTweet{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgFollow{},
 	)
 	// this line is used by starport scaffolding # 3
 

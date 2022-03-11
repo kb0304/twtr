@@ -13,6 +13,13 @@ export interface MsgCreateTweetResponse {
   id: number;
 }
 
+export interface MsgFollow {
+  follower: string;
+  followee: string;
+}
+
+export interface MsgFollowResponse {}
+
 const baseMsgCreateTweet: object = { creator: "", body: "" };
 
 export const MsgCreateTweet = {
@@ -145,10 +152,121 @@ export const MsgCreateTweetResponse = {
   },
 };
 
+const baseMsgFollow: object = { follower: "", followee: "" };
+
+export const MsgFollow = {
+  encode(message: MsgFollow, writer: Writer = Writer.create()): Writer {
+    if (message.follower !== "") {
+      writer.uint32(10).string(message.follower);
+    }
+    if (message.followee !== "") {
+      writer.uint32(18).string(message.followee);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgFollow {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgFollow } as MsgFollow;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.follower = reader.string();
+          break;
+        case 2:
+          message.followee = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgFollow {
+    const message = { ...baseMsgFollow } as MsgFollow;
+    if (object.follower !== undefined && object.follower !== null) {
+      message.follower = String(object.follower);
+    } else {
+      message.follower = "";
+    }
+    if (object.followee !== undefined && object.followee !== null) {
+      message.followee = String(object.followee);
+    } else {
+      message.followee = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgFollow): unknown {
+    const obj: any = {};
+    message.follower !== undefined && (obj.follower = message.follower);
+    message.followee !== undefined && (obj.followee = message.followee);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgFollow>): MsgFollow {
+    const message = { ...baseMsgFollow } as MsgFollow;
+    if (object.follower !== undefined && object.follower !== null) {
+      message.follower = object.follower;
+    } else {
+      message.follower = "";
+    }
+    if (object.followee !== undefined && object.followee !== null) {
+      message.followee = object.followee;
+    } else {
+      message.followee = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgFollowResponse: object = {};
+
+export const MsgFollowResponse = {
+  encode(_: MsgFollowResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgFollowResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgFollowResponse } as MsgFollowResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgFollowResponse {
+    const message = { ...baseMsgFollowResponse } as MsgFollowResponse;
+    return message;
+  },
+
+  toJSON(_: MsgFollowResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<MsgFollowResponse>): MsgFollowResponse {
+    const message = { ...baseMsgFollowResponse } as MsgFollowResponse;
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   CreateTweet(request: MsgCreateTweet): Promise<MsgCreateTweetResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  Follow(request: MsgFollow): Promise<MsgFollowResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -166,6 +284,12 @@ export class MsgClientImpl implements Msg {
     return promise.then((data) =>
       MsgCreateTweetResponse.decode(new Reader(data))
     );
+  }
+
+  Follow(request: MsgFollow): Promise<MsgFollowResponse> {
+    const data = MsgFollow.encode(request).finish();
+    const promise = this.rpc.request("kb0304.twtr.twtr.Msg", "Follow", data);
+    return promise.then((data) => MsgFollowResponse.decode(new Reader(data)));
   }
 }
 

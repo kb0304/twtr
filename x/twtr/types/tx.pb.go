@@ -123,15 +123,105 @@ func (m *MsgCreateTweetResponse) GetId() uint64 {
 	return 0
 }
 
+type MsgFollow struct {
+	Follower string `protobuf:"bytes,1,opt,name=follower,proto3" json:"follower,omitempty"`
+	Followee string `protobuf:"bytes,2,opt,name=followee,proto3" json:"followee,omitempty"`
+}
+
+func (m *MsgFollow) Reset()         { *m = MsgFollow{} }
+func (m *MsgFollow) String() string { return proto.CompactTextString(m) }
+func (*MsgFollow) ProtoMessage()    {}
+func (*MsgFollow) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8b70e8da6337c43c, []int{2}
+}
+func (m *MsgFollow) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFollow) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFollow.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFollow) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFollow.Merge(m, src)
+}
+func (m *MsgFollow) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFollow) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFollow.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFollow proto.InternalMessageInfo
+
+func (m *MsgFollow) GetFollower() string {
+	if m != nil {
+		return m.Follower
+	}
+	return ""
+}
+
+func (m *MsgFollow) GetFollowee() string {
+	if m != nil {
+		return m.Followee
+	}
+	return ""
+}
+
+type MsgFollowResponse struct {
+}
+
+func (m *MsgFollowResponse) Reset()         { *m = MsgFollowResponse{} }
+func (m *MsgFollowResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgFollowResponse) ProtoMessage()    {}
+func (*MsgFollowResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8b70e8da6337c43c, []int{3}
+}
+func (m *MsgFollowResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgFollowResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgFollowResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgFollowResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgFollowResponse.Merge(m, src)
+}
+func (m *MsgFollowResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgFollowResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgFollowResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgFollowResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgCreateTweet)(nil), "kb0304.twtr.twtr.MsgCreateTweet")
 	proto.RegisterType((*MsgCreateTweetResponse)(nil), "kb0304.twtr.twtr.MsgCreateTweetResponse")
+	proto.RegisterType((*MsgFollow)(nil), "kb0304.twtr.twtr.MsgFollow")
+	proto.RegisterType((*MsgFollowResponse)(nil), "kb0304.twtr.twtr.MsgFollowResponse")
 }
 
 func init() { proto.RegisterFile("twtr/tx.proto", fileDescriptor_8b70e8da6337c43c) }
 
 var fileDescriptor_8b70e8da6337c43c = []byte{
-	// 214 bytes of a gzipped FileDescriptorProto
+	// 272 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x29, 0x2f, 0x29,
 	0xd2, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0xc8, 0x4e, 0x32, 0x30, 0x36,
 	0x30, 0xd1, 0x03, 0x89, 0x82, 0x09, 0x25, 0x3b, 0x2e, 0x3e, 0xdf, 0xe2, 0x74, 0xe7, 0xa2, 0xd4,
@@ -139,13 +229,16 @@ var fileDescriptor_8b70e8da6337c43c = []byte{
 	0x48, 0x82, 0x51, 0x81, 0x51, 0x83, 0x33, 0x08, 0xc6, 0x15, 0x12, 0xe2, 0x62, 0x49, 0xca, 0x4f,
 	0xa9, 0x94, 0x60, 0x02, 0x0b, 0x83, 0xd9, 0x4a, 0x1a, 0x5c, 0x62, 0xa8, 0xfa, 0x83, 0x52, 0x8b,
 	0x0b, 0xf2, 0xf3, 0x8a, 0x53, 0x85, 0xf8, 0xb8, 0x98, 0x32, 0x53, 0xc0, 0x46, 0xb0, 0x04, 0x31,
-	0x65, 0xa6, 0x18, 0x25, 0x70, 0x31, 0xfb, 0x16, 0xa7, 0x0b, 0x45, 0x72, 0x71, 0x23, 0xdb, 0xa6,
-	0xa0, 0x87, 0xee, 0x24, 0x3d, 0x54, 0xf3, 0xa4, 0x34, 0x08, 0xa9, 0x80, 0xd9, 0xe8, 0x64, 0x7b,
-	0xe2, 0x91, 0x1c, 0xe3, 0x85, 0x47, 0x72, 0x8c, 0x0f, 0x1e, 0xc9, 0x31, 0x4e, 0x78, 0x2c, 0xc7,
-	0x70, 0xe1, 0xb1, 0x1c, 0xc3, 0x8d, 0xc7, 0x72, 0x0c, 0x51, 0xca, 0xe9, 0x99, 0x25, 0x19, 0xa5,
-	0x49, 0x7a, 0xc9, 0xf9, 0xb9, 0xfa, 0x10, 0xd3, 0xf4, 0xc1, 0x01, 0x53, 0x01, 0xa1, 0x4a, 0x2a,
-	0x0b, 0x52, 0x8b, 0x93, 0xd8, 0xc0, 0x61, 0x64, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff, 0x5f, 0xa9,
-	0x23, 0x1d, 0x34, 0x01, 0x00, 0x00,
+	0x65, 0xa6, 0x28, 0x39, 0x73, 0x71, 0xfa, 0x16, 0xa7, 0xbb, 0xe5, 0xe7, 0xe4, 0xe4, 0x97, 0x0b,
+	0x49, 0x71, 0x71, 0xa4, 0x81, 0x59, 0xa9, 0x30, 0x5b, 0xe0, 0x7c, 0x24, 0xb9, 0x54, 0xa8, 0x55,
+	0x70, 0xbe, 0x92, 0x30, 0x97, 0x20, 0xdc, 0x10, 0x98, 0x4d, 0x46, 0x6b, 0x18, 0xb9, 0x98, 0x7d,
+	0x8b, 0xd3, 0x85, 0x22, 0xb9, 0xb8, 0x91, 0x3d, 0xa2, 0xa0, 0x87, 0xee, 0x5b, 0x3d, 0x54, 0xa7,
+	0x4a, 0x69, 0x10, 0x52, 0x01, 0xf7, 0x8c, 0x17, 0x17, 0x1b, 0xd4, 0xe5, 0xd2, 0x58, 0xf5, 0x40,
+	0x24, 0xa5, 0x94, 0xf1, 0x48, 0xc2, 0xcc, 0x72, 0xb2, 0x3d, 0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23,
+	0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6,
+	0x63, 0x39, 0x86, 0x28, 0xe5, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd, 0xe4, 0xfc, 0x5c, 0x7d,
+	0x88, 0x41, 0xfa, 0xe0, 0xf8, 0xab, 0x80, 0x50, 0x25, 0x95, 0x05, 0xa9, 0xc5, 0x49, 0x6c, 0xe0,
+	0xa8, 0x34, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xc2, 0x2f, 0xbe, 0x8f, 0xdb, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -161,6 +254,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
 	CreateTweet(ctx context.Context, in *MsgCreateTweet, opts ...grpc.CallOption) (*MsgCreateTweetResponse, error)
+	Follow(ctx context.Context, in *MsgFollow, opts ...grpc.CallOption) (*MsgFollowResponse, error)
 }
 
 type msgClient struct {
@@ -180,9 +274,19 @@ func (c *msgClient) CreateTweet(ctx context.Context, in *MsgCreateTweet, opts ..
 	return out, nil
 }
 
+func (c *msgClient) Follow(ctx context.Context, in *MsgFollow, opts ...grpc.CallOption) (*MsgFollowResponse, error) {
+	out := new(MsgFollowResponse)
+	err := c.cc.Invoke(ctx, "/kb0304.twtr.twtr.Msg/Follow", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	CreateTweet(context.Context, *MsgCreateTweet) (*MsgCreateTweetResponse, error)
+	Follow(context.Context, *MsgFollow) (*MsgFollowResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -191,6 +295,9 @@ type UnimplementedMsgServer struct {
 
 func (*UnimplementedMsgServer) CreateTweet(ctx context.Context, req *MsgCreateTweet) (*MsgCreateTweetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTweet not implemented")
+}
+func (*UnimplementedMsgServer) Follow(ctx context.Context, req *MsgFollow) (*MsgFollowResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Follow not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -215,6 +322,24 @@ func _Msg_CreateTweet_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_Follow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgFollow)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).Follow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kb0304.twtr.twtr.Msg/Follow",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).Follow(ctx, req.(*MsgFollow))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "kb0304.twtr.twtr.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -222,6 +347,10 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTweet",
 			Handler:    _Msg_CreateTweet_Handler,
+		},
+		{
+			MethodName: "Follow",
+			Handler:    _Msg_Follow_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -293,6 +422,66 @@ func (m *MsgCreateTweetResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgFollow) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFollow) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFollow) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Followee) > 0 {
+		i -= len(m.Followee)
+		copy(dAtA[i:], m.Followee)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Followee)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Follower) > 0 {
+		i -= len(m.Follower)
+		copy(dAtA[i:], m.Follower)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Follower)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgFollowResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgFollowResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgFollowResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -330,6 +519,32 @@ func (m *MsgCreateTweetResponse) Size() (n int) {
 	if m.Id != 0 {
 		n += 1 + sovTx(uint64(m.Id))
 	}
+	return n
+}
+
+func (m *MsgFollow) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Follower)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Followee)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgFollowResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	return n
 }
 
@@ -501,6 +716,170 @@ func (m *MsgCreateTweetResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFollow) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFollow: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFollow: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Follower", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Follower = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Followee", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Followee = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgFollowResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgFollowResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgFollowResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

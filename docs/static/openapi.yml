@@ -20269,6 +20269,8 @@ definitions:
       id:
         type: string
         format: uint64
+  kb0304.twtr.twtr.MsgFollowResponse:
+    type: object
   kb0304.twtr.twtr.Params:
     type: object
     description: Params defines the parameters for the module.

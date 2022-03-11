@@ -11,6 +11,7 @@ export interface TwtrMsgCreateTweetResponse {
     /** @format uint64 */
     id?: string;
 }
+export declare type TwtrMsgFollowResponse = object;
 /**
  * Params defines the parameters for the module.
  */

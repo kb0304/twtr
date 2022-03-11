@@ -8,6 +8,7 @@ option go_package = "github.com/kb0304/twtr/x/twtr/types";
 // Msg defines the Msg service.
 service Msg {
       rpc CreateTweet(MsgCreateTweet) returns (MsgCreateTweetResponse);
+  rpc Follow(MsgFollow) returns (MsgFollowResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -18,6 +19,14 @@ message MsgCreateTweet {
 
 message MsgCreateTweetResponse {
   uint64 id = 1;
+}
+
+message MsgFollow {
+  string follower = 1;
+  string followee = 2;
+}
+
+message MsgFollowResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

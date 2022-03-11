@@ -123,6 +123,108 @@ export const MsgCreateTweetResponse = {
         return message;
     },
 };
+const baseMsgFollow = { follower: "", followee: "" };
+export const MsgFollow = {
+    encode(message, writer = Writer.create()) {
+        if (message.follower !== "") {
+            writer.uint32(10).string(message.follower);
+        }
+        if (message.followee !== "") {
+            writer.uint32(18).string(message.followee);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgFollow };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.follower = reader.string();
+                    break;
+                case 2:
+                    message.followee = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgFollow };
+        if (object.follower !== undefined && object.follower !== null) {
+            message.follower = String(object.follower);
+        }
+        else {
+            message.follower = "";
+        }
+        if (object.followee !== undefined && object.followee !== null) {
+            message.followee = String(object.followee);
+        }
+        else {
+            message.followee = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.follower !== undefined && (obj.follower = message.follower);
+        message.followee !== undefined && (obj.followee = message.followee);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgFollow };
+        if (object.follower !== undefined && object.follower !== null) {
+            message.follower = object.follower;
+        }
+        else {
+            message.follower = "";
+        }
+        if (object.followee !== undefined && object.followee !== null) {
+            message.followee = object.followee;
+        }
+        else {
+            message.followee = "";
+        }
+        return message;
+    },
+};
+const baseMsgFollowResponse = {};
+export const MsgFollowResponse = {
+    encode(_, writer = Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgFollowResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        const message = { ...baseMsgFollowResponse };
+        return message;
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = { ...baseMsgFollowResponse };
+        return message;
+    },
+};
 export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
@@ -131,6 +233,11 @@ export class MsgClientImpl {
         const data = MsgCreateTweet.encode(request).finish();
         const promise = this.rpc.request("kb0304.twtr.twtr.Msg", "CreateTweet", data);
         return promise.then((data) => MsgCreateTweetResponse.decode(new Reader(data)));
+    }
+    Follow(request) {
+        const data = MsgFollow.encode(request).finish();
+        const promise = this.rpc.request("kb0304.twtr.twtr.Msg", "Follow", data);
+        return promise.then((data) => MsgFollowResponse.decode(new Reader(data)));
     }
 }
 var globalThis = (() => {

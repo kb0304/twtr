@@ -7,6 +7,12 @@ export interface MsgCreateTweet {
 export interface MsgCreateTweetResponse {
     id: number;
 }
+export interface MsgFollow {
+    follower: string;
+    followee: string;
+}
+export interface MsgFollowResponse {
+}
 export declare const MsgCreateTweet: {
     encode(message: MsgCreateTweet, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCreateTweet;
@@ -21,15 +27,31 @@ export declare const MsgCreateTweetResponse: {
     toJSON(message: MsgCreateTweetResponse): unknown;
     fromPartial(object: DeepPartial<MsgCreateTweetResponse>): MsgCreateTweetResponse;
 };
+export declare const MsgFollow: {
+    encode(message: MsgFollow, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgFollow;
+    fromJSON(object: any): MsgFollow;
+    toJSON(message: MsgFollow): unknown;
+    fromPartial(object: DeepPartial<MsgFollow>): MsgFollow;
+};
+export declare const MsgFollowResponse: {
+    encode(_: MsgFollowResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgFollowResponse;
+    fromJSON(_: any): MsgFollowResponse;
+    toJSON(_: MsgFollowResponse): unknown;
+    fromPartial(_: DeepPartial<MsgFollowResponse>): MsgFollowResponse;
+};
 /** Msg defines the Msg service. */
 export interface Msg {
-    /** this line is used by starport scaffolding # proto/tx/rpc */
     CreateTweet(request: MsgCreateTweet): Promise<MsgCreateTweetResponse>;
+    /** this line is used by starport scaffolding # proto/tx/rpc */
+    Follow(request: MsgFollow): Promise<MsgFollowResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
     CreateTweet(request: MsgCreateTweet): Promise<MsgCreateTweetResponse>;
+    Follow(request: MsgFollow): Promise<MsgFollowResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
