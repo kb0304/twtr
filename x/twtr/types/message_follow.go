@@ -42,5 +42,10 @@ func (msg *MsgFollow) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid follower address (%s)", err)
 	}
+
+	_, err = sdk.AccAddressFromBech32(msg.Followee)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid followee address (%s)", err)
+	}
 	return nil
 }
