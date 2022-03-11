@@ -10,5 +10,6 @@ declare const _default: {
     CosmosCosmosSdkCosmosStakingV1Beta1: (store: any) => void;
     CosmosCosmosSdkCosmosVestingV1Beta1: (store: any) => void;
     CosmosIbcGoIbcApplicationsTransferV1: (store: any) => void;
+    Kb0304TwtrKb0304TwtrTwtr: (store: any) => void;
 };
 export default _default;
